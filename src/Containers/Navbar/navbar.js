@@ -10,6 +10,9 @@ class Navbar extends Component{
     CONTACT = 3;
     SIGNUP = 4;
     LOGIN = 5;
+    DASHBOARD = 6;
+    LIVE = 7;
+    SETTINGS = 8;
 
 
     state = {
@@ -19,6 +22,36 @@ class Navbar extends Component{
     getClassName = (link) => link === this.state.active? "nav-link active" : "nav-link";
 
     getNavbarEntries = () => {
+      console.log(this.props.authToken);
+      
+      if(this.props.authToken){
+        return(
+          <React.Fragment>
+          <ul className="navbar-nav">
+          <li className="nav-item">
+            <a className={this.getClassName(this.ABOUT)} >About</a>
+          </li>
+          <li className="nav-item">
+            <a className={this.getClassName(this.CONTACT)} >Contact</a>
+          </li>
+         </ul>      
+          <ul className="nav navbar-nav ml-auto">
+          <li className="nav-item">
+            <a className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
+          </li>
+          <li className="nav-item">
+            <a className={this.getClassName(this.LIVE)} >Live</a>
+          </li>
+          <li className="nav-item">
+            <a className={this.getClassName(this.SETTINGS)} >Settings</a>
+          </li>  
+          <li className="nav-item">
+                <a className="nav-link"  onClick={this.props.onClickLogout}><span className="fas fa-user"></span> Logout</a>
+          </li>                 
+        </ul> 
+        </React.Fragment>
+        )
+      } else {
         return (
             <React.Fragment>
             <ul className="navbar-nav">
@@ -39,6 +72,7 @@ class Navbar extends Component{
           </ul> 
           </React.Fragment>              
         )
+      }
     }
     render(){
         return(
