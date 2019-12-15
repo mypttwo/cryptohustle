@@ -37,13 +37,13 @@ class Navbar extends Component{
          </ul>      
           <ul className="nav navbar-nav ml-auto">
           <li className="nav-item">
-            <a className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
+            <a onClick={this.props.onClickDashboard} className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
           </li>
           <li className="nav-item">
-            <a className={this.getClassName(this.LIVE)} >Live</a>
+            <a onClick={this.props.onClickLive} className={this.getClassName(this.LIVE)} >Live</a>
           </li>
           <li className="nav-item">
-            <a className={this.getClassName(this.SETTINGS)} >Settings</a>
+            <a onClick={this.props.onClickSettings} className={this.getClassName(this.SETTINGS)} >Settings</a>
           </li>  
           <li className="nav-item">
                 <a className="nav-link"  onClick={this.props.onClickLogout}><span className="fas fa-user"></span> Logout</a>

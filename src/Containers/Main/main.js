@@ -3,6 +3,10 @@ import {Redirect} from 'react-router-dom';
 
 
 import Navbar from '../Navbar/navbar';
+import { switchCase } from '@babel/types';
+import Dashboard from '../Dashboard/dashboard';
+import Settings from '../Settings/settings';
+import Live from '../LIve/live';
 
 
 
@@ -36,9 +40,9 @@ class Main extends Component{
         })
     }
 
-    handleClickHome = () => {
+    handleClickLive = () => {
         this.setState({
-            display : this.HOME
+            display : this.LIVE
         })
     }
     handleClickDashboard = () => {
@@ -58,6 +62,23 @@ class Main extends Component{
         })
     }
 
+    getComponentForDisplay = () => {
+        switch (this.state.display) {
+                case this.DASHBOARD:
+                    return <Dashboard></Dashboard>
+                    break;
+                case this.LIVE:
+                    return <Live></Live>
+                    break; 
+                case this.SETTINGS:
+                    return <Settings></Settings>
+                    break;                       
+            default:
+                    return <Dashboard></Dashboard>
+                break;
+        }
+    }
+
     render(){
         if(this.state.logout){
             return <Redirect to={{
@@ -70,9 +91,13 @@ class Main extends Component{
             <React.Fragment>
             <Navbar 
             authToken={this.state.authToken} 
-            onClickLogout={this.handleClickLogout}/>
+            onClickLogout={this.handleClickLogout}
+            onClickDashboard={this.handleClickDashboard}
+            onClickLive={this.handleClickLive}
+            onClickSettings={this.handleClickSettings}/>
                 <div>{this.state.authToken}</div>
                 <div>{this.state.userDbId}</div>
+                {this.getComponentForDisplay()}
             </React.Fragment>
         )
     }
