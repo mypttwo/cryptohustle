@@ -30,7 +30,9 @@ class Main extends Component{
             })
         }
         else {
-            console.log('no authToken');
+            this.setState({
+                logout : true
+            })           
         }
     }
 
