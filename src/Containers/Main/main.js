@@ -67,16 +67,28 @@ class Main extends Component{
     getComponentForDisplay = () => {
         switch (this.state.display) {
                 case this.DASHBOARD:
-                    return <Dashboard></Dashboard>
+                    return <Dashboard 
+                    authToken={this.state.authToken} 
+                    userDbId={this.state.userDbId}
+                    handleLogout={this.handleClickLogout} />
                     break;
                 case this.LIVE:
-                    return <Live></Live>
+                    return <Live 
+                    authToken={this.state.authToken} 
+                    userDbId={this.state.userDbId}
+                    handleLogout={this.handleClickLogout} />
                     break; 
                 case this.SETTINGS:
-                    return <Settings></Settings>
+                    return <Settings 
+                    authToken={this.state.authToken} 
+                    userDbId={this.state.userDbId}
+                    handleLogout={this.handleClickLogout} />
                     break;                       
             default:
-                    return <Dashboard></Dashboard>
+                    return <Dashboard 
+                    authToken={this.state.authToken} 
+                    userDbId={this.state.userDbId}
+                    handleLogout={this.handleClickLogout} />
                 break;
         }
     }
@@ -97,8 +109,6 @@ class Main extends Component{
             onClickDashboard={this.handleClickDashboard}
             onClickLive={this.handleClickLive}
             onClickSettings={this.handleClickSettings}/>
-                <div>{this.state.authToken}</div>
-                <div>{this.state.userDbId}</div>
                 {this.getComponentForDisplay()}
             </React.Fragment>
         )
