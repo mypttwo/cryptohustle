@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {NavLink, Link} from 'react-router-dom';
 
+import AuthContext from '../../authContext';
+
 const appname = 'Crypto Hustle';
 
 class Navbar extends Component{
@@ -14,17 +16,16 @@ class Navbar extends Component{
     LIVE = 7;
     SETTINGS = 8;
 
-
     state = {
         active : this.HOME
       }
 
     getClassName = (link) => link === this.state.active? "nav-link active" : "nav-link";
 
-    getNavbarEntries = () => {
-      console.log(this.props.authToken);
-      
-      if(this.props.authToken){
+    static contextType = AuthContext;
+
+    getNavbarEntries = () => {      
+      if(this.context.authToken){
         return(
           <React.Fragment>
           <ul className="navbar-nav">
@@ -75,6 +76,9 @@ class Navbar extends Component{
       }
     }
     render(){
+
+      console.log(this.context.authToken);
+      
         return(
             <nav className="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
             <Link className="navbar-brand" to="/" >{appname}</Link>

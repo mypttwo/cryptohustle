@@ -1,24 +1,17 @@
 import React, {Component} from 'react';
-const axios = require('axios');
 
-import {server} from '../../config';
-import {get_currency_market_data} from '../../ExchangeDataReader/reader';
+import AuthContext from "../../authContext";
+// import {server} from '../../config';
+// import {get_currency_market_data} from '../../ExchangeDataReader/reader';
 
 class Dashboard extends Component{
-    state = {
-        authToken : null,
-        userDbId : null,
+    static contextType = AuthContext;
+
+    componentDidMount = () => {
+        console.log(this.context.userDbId);
     }
-    componentDidMount(){
-        if(!this.props.authToken){
-            this.props.handleLogout();// this will not work if props are not populated.
-        }
-        this.setState({
-            authToken : this.props.authToken,
-            userDbId : this.props.userDbId,            
-        })
-    }
-    render(){
+
+    render(){        
         return <div>
             Dashboard
         </div>
@@ -26,4 +19,3 @@ class Dashboard extends Component{
 }
 
 export default Dashboard;
-

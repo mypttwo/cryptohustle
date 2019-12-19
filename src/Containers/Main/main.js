@@ -3,10 +3,11 @@ import {Redirect} from 'react-router-dom';
 
 
 import Navbar from '../Navbar/navbar';
-import { switchCase } from '@babel/types';
 import Dashboard from '../Dashboard/dashboard';
 import Settings from '../Settings/settings';
-import Live from '../LIve/live';
+import Live from '../Live/live';
+
+import AuthContext from '../../authContext';
 
 
 
@@ -65,32 +66,22 @@ class Main extends Component{
     }
 
     getComponentForDisplay = () => {
-        switch (this.state.display) {
-                case this.DASHBOARD:
-                    return <Dashboard 
-                    authToken={this.state.authToken} 
-                    userDbId={this.state.userDbId}
-                    handleLogout={this.handleClickLogout} />
-                    break;
-                case this.LIVE:
-                    return <Live 
-                    authToken={this.state.authToken} 
-                    userDbId={this.state.userDbId}
-                    handleLogout={this.handleClickLogout} />
-                    break; 
-                case this.SETTINGS:
-                    return <Settings 
-                    authToken={this.state.authToken} 
-                    userDbId={this.state.userDbId}
-                    handleLogout={this.handleClickLogout} />
-                    break;                       
-            default:
-                    return <Dashboard 
-                    authToken={this.state.authToken} 
-                    userDbId={this.state.userDbId}
-                    handleLogout={this.handleClickLogout} />
-                break;
-        }
+        if(this.state.authToken){
+            switch (this.state.display) {
+                    case this.DASHBOARD:
+                        return <Dashboard />
+
+                    case this.LIVE:
+                        return <Live />
+
+                    case this.SETTINGS:
+                        return <Settings />
+                        
+                default:
+                        return <Dashboard />
+
+            }
+        } 
     }
 
     render(){
@@ -99,18 +90,24 @@ class Main extends Component{
                 pathname:'/'
             }} />
         }
-
+        
 
         return(
+            <AuthContext.Provider 
+            value={{
+                authToken : this.state.authToken, 
+                userDbId : this.state.userDbId,
+                doLogout : this.handleClickLogout
+                }}   >  
             <React.Fragment>
             <Navbar 
-            authToken={this.state.authToken} 
             onClickLogout={this.handleClickLogout}
             onClickDashboard={this.handleClickDashboard}
             onClickLive={this.handleClickLive}
             onClickSettings={this.handleClickSettings}/>
                 {this.getComponentForDisplay()}
             </React.Fragment>
+            </AuthContext.Provider>
         )
     }
 }
