@@ -23,6 +23,24 @@ class Navbar extends Component{
     getClassName = (link) => link === this.state.active? "nav-link active" : "nav-link";
 
     static contextType = AuthContext;
+    onClickSettings = () => {
+      this.setState({
+        active : this.SETTINGS
+      })
+      this.props.onClickSettings();
+    }
+    onClickLive = () => {
+      this.setState({
+        active : this.LIVE
+      })
+      this.props.onClickLive();
+    }
+    onClickDashboard = () => {
+      this.setState({
+        active : this.DASHBOARD
+      })
+      this.props.onClickDashboard();
+    }
 
     getNavbarEntries = () => {      
       if(this.context.authToken){
@@ -38,13 +56,13 @@ class Navbar extends Component{
          </ul>      
           <ul className="nav navbar-nav ml-auto">
           <li className="nav-item">
-            <a onClick={this.props.onClickDashboard} className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
+            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickDashboard} className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
           </li>
           <li className="nav-item">
-            <a onClick={this.props.onClickLive} className={this.getClassName(this.LIVE)} >Live</a>
+            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickLive} className={this.getClassName(this.LIVE)} >Live</a>
           </li>
           <li className="nav-item">
-            <a onClick={this.props.onClickSettings} className={this.getClassName(this.SETTINGS)} >Settings</a>
+            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickSettings} className={this.getClassName(this.SETTINGS)} >Settings</a>
           </li>  
           <li className="nav-item">
                 <a className="nav-link"  onClick={this.props.onClickLogout}><span className="fas fa-user"></span> Logout</a>
@@ -82,7 +100,7 @@ class Navbar extends Component{
         return(
             <nav className="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
             <Link className="navbar-brand" to="/" >{appname}</Link>
-            <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
+            <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
               <span className="navbar-toggler-icon"></span>
             </button>
             <div id="navb" className="navbar-collapse collapse hide">
