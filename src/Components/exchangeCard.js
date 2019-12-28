@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ExchangeDataList from './exchangeDataList';
+
 const ExchangeCard = (props) => {
 
     
@@ -21,7 +23,7 @@ const ExchangeCard = (props) => {
                     </p>
                     <div className="collapse" id="collapse">
                         <div className="collapse card card-body" id="collapse">
-                            {/* '<AllData data={props.exchangeData.alldata} />' */}
+                            <ExchangeDataList data={props.exchangeData.data.allData} />
                         </div>
                     </div>   
                 </div>
