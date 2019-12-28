@@ -1,12 +1,15 @@
+import axios from 'axios';
 
-const getDataBySymbolFromCointiger = (data, symbol) => {
+import {server} from '../config';
+
+const getDataBySymbol = (data, symbol) => {
     if(data){
         return data[symbol];
     }
     return null;
 }
 
-const readCointigerCurrencyData = (currencydata, key) =>{
+const readCurrencyData = (currencydata, key) =>{
     if(currencydata){
         return currencydata[key];
     }
@@ -14,13 +17,38 @@ const readCointigerCurrencyData = (currencydata, key) =>{
 }
 
 
-const getCointigerSymbolText = (currency, market) => {
+const getSymbolText = (currency, market) => {
     if(currency && market){
         return  currency.toUpperCase()+market.toUpperCase();
     }
     return null;
 }
 
-export {getCointigerSymbolText,
-    getDataBySymbolFromCointiger,
-    readCointigerCurrencyData}
+const getData = () => {
+    return axios.get(`${server}/proxycointiger/exchange/api/public/market/detail`);
+}
+
+const read = (currency, market) => {
+    
+    return getData().then((res) => {
+        let symbol = getSymbolText(currency.symbol, market.symbol);
+        let currencyData = getDataBySymbol(res.data,symbol);
+        return{
+            lastPrice : readCurrencyData(currencyData, "last"),
+            buy : readCurrencyData(currencyData, "highestBid"),
+            sell : readCurrencyData(currencyData, "lowestAsk"),
+            allData : currencyData,
+            cache : res.data
+        }
+        
+    }).catch((err) => {
+        console.error(err);
+    })
+}
+
+export {
+    getSymbolText,
+    getDataBySymbol,
+    readCurrencyData,
+    read
+}
