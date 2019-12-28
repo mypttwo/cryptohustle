@@ -65,15 +65,15 @@ class Dashboard extends Component{
         })
     }
 
-
+    timer = null;
 
     componentDidMount = () => {
         this.getTrackedExchanges();        
-        
+        this.timer = setInterval(() => this.getExchangeData(this.state.exchanges), 10 *1000);
     }
 
     componentWillUnmount(){
-
+        clearTimeout(this.timer);
     }
 
     getExchangeCardsJSX = () => {
