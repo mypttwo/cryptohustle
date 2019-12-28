@@ -80,6 +80,7 @@ class Dashboard extends Component{
         return this.state.exchangeData.map(exchange => {
             return <ExchangeCard 
             key={exchange.exchangeKey} 
+            exchangeKey={exchange.exchangeKey} 
             currency={this.state.currency}
             market={this.state.market}
             exchangeData={exchange}/>
