@@ -8,7 +8,7 @@ import {getAuthConfig} from '../../Utils/getAuthConfig';
 import ControlBar from '../../Components/controlBar';
 import currencyList from '../../Utils/currencyList';
 import marketList from '../../Utils/marketList';
-import ExchangeCard from '../ExchangeCard/exchangeCard';
+import ExchangeCard from '../../Components/exchangeCard';
 import exchange from '../../ExchangeDataReader/exchange';
 
 class Dashboard extends Component{
