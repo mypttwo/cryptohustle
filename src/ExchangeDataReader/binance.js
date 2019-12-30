@@ -38,9 +38,9 @@ const read = (currency, market) => {
         let symbol = getSymbolText(currency.symbol, market.symbol);
         let currencyData = getDataBySymbol(res.data,symbol);
         return{
-            lastPrice : readCurrencyData(currencyData, "lastPrice"),
-            buy : readCurrencyData(currencyData, "bidPrice"),
-            sell : readCurrencyData(currencyData, "askPrice"),
+            lastPrice : currencyData ? readCurrencyData(currencyData, "lastPrice") : null,
+            buy : currencyData ? readCurrencyData(currencyData, "bidPrice") : null,
+            sell : currencyData ? readCurrencyData(currencyData, "askPrice") : null,
             allData : currencyData,
             cache : res.data
         }

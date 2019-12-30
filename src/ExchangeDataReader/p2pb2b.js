@@ -4,7 +4,7 @@ import {server} from '../config';
 
 const getDataBySymbol = (data, symbol) => {
     
-    if(data){
+    if(data && data.result[symbol]){
         return data.result[symbol].ticker;
     }
     return null;
@@ -34,9 +34,9 @@ const read = (currency, market) => {
         let symbol = getSymbolText(currency.symbol, market.symbol);
         let currencyData = getDataBySymbol(res.data,symbol);
         return{
-            lastPrice : readCurrencyData(currencyData, "last"),
-            buy : readCurrencyData(currencyData, "bid"),
-            sell : readCurrencyData(currencyData, "ask"),
+            lastPrice : currencyData ? readCurrencyData(currencyData, "last") : null,
+            buy : currencyData ? readCurrencyData(currencyData, "bid") : null,
+            sell : currencyData ? readCurrencyData(currencyData, "ask") : null,
             allData : currencyData,
             cache : res.data
         }
