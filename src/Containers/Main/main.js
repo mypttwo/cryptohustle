@@ -6,6 +6,7 @@ import Navbar from '../Navbar/navbar';
 import Dashboard from '../Dashboard/dashboard';
 import Settings from '../Settings/settings';
 import Live from '../Live/live';
+import themes from '../../Utils/themes';
 
 import AuthContext from '../../authContext';
 
@@ -19,8 +20,10 @@ class Main extends Component{
         display : this.DASHBOARD,
         authToken : null,
         userDbId : null,
-        logout :false
+        logout :false,
+        stylePath : themes['cosmo'].url
     }
+
 
     componentDidMount(){
         if(this.props.location.state && this.props.location.state.authToken){
@@ -65,6 +68,12 @@ class Main extends Component{
         })
     }
 
+    handleChangeTheme = (themeUrl) => {
+        this.setState({
+            stylePath : themeUrl
+        })
+    }
+
     getComponentForDisplay = () => {
         if(this.state.authToken){
             switch (this.state.display) {
@@ -100,11 +109,13 @@ class Main extends Component{
                 doLogout : this.handleClickLogout
                 }}   >  
             <React.Fragment>
+            <link rel="stylesheet" type="text/css" href={this.state.stylePath} />
             <Navbar 
             onClickLogout={this.handleClickLogout}
             onClickDashboard={this.handleClickDashboard}
             onClickLive={this.handleClickLive}
-            onClickSettings={this.handleClickSettings}/>
+            onClickSettings={this.handleClickSettings}
+            onChangeTheme={this.handleChangeTheme}/>
                 {this.getComponentForDisplay()}
             </React.Fragment>
             </AuthContext.Provider>

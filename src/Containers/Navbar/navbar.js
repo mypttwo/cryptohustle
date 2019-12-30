@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {NavLink, Link} from 'react-router-dom';
 
 import AuthContext from '../../authContext';
+import themes from '../../Utils/themes'; 
 
 const appname = 'Crypto Hustle';
 
@@ -41,6 +42,20 @@ class Navbar extends Component{
       })
       this.props.onClickDashboard();
     }
+    setTheme = (key) => {
+      console.log(themes[key].url);
+      this.props.onChangeTheme(themes[key].url);    
+    }
+    getThemesJSX = () => {
+      debugger;
+      console.log(themes);
+      
+      if(themes){
+        return Object.keys(themes).map((theme) => {
+        return <a key={theme} href="#" className="dropdown-item" onClick={() => this.setTheme(theme)}>{themes[theme].name}</a>
+        })
+      }
+    }
 
     getNavbarEntries = () => {      
       if(this.context.authToken){
@@ -53,6 +68,16 @@ class Navbar extends Component{
           <li className="nav-item">
             <a className={this.getClassName(this.CONTACT)} >Contact</a>
           </li>
+          <li className="nav-item dropdown">
+        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Theme
+        </a>
+        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+          {this.getThemesJSX()}
+          <div className="dropdown-divider"></div>
+          <a className="dropdown-item" href="#">Suggest...</a>
+        </div>
+      </li>          
          </ul>      
           <ul className="nav navbar-nav ml-auto">
           <li className="nav-item">
