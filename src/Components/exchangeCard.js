@@ -5,7 +5,6 @@ import ExchangeDataList from './exchangeDataList';
 const ExchangeCard = (props) => {
 
     let collapseId = props.exchangeData.exchangeKey + 'collapse';
-    console.log(collapseId);
     
         return(
             <div className="col-sm-3 mb-2">

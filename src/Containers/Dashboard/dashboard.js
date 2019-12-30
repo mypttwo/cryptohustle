@@ -44,7 +44,6 @@ class Dashboard extends Component{
         })
 
         Promise.all(exchangeList).then((resArray) => {
-            console.log(resArray);
             this.setState({
                 exchangeData : resArray
             })
