@@ -21,13 +21,12 @@ class Main extends Component{
         authToken : null,
         userDbId : null,
         logout :false,
-        stylePath : themes['cosmo'].url
+        stylePath : themes['cyborg'].url
     }
 
 
     componentDidMount(){
         if(this.props.location.state && this.props.location.state.authToken){
-            console.log(this.props.location.state.authToken);
             this.setState({
                 authToken : this.props.location.state.authToken,
                 userDbId : this.props.location.state.userDbId

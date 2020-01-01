@@ -47,9 +47,6 @@ class Navbar extends Component{
       this.props.onChangeTheme(themes[key].url);    
     }
     getThemesJSX = () => {
-      debugger;
-      console.log(themes);
-      
       if(themes){
         return Object.keys(themes).map((theme) => {
         return <a key={theme} href="#" className="dropdown-item" onClick={() => this.setTheme(theme)}>{themes[theme].name}</a>
@@ -119,9 +116,6 @@ class Navbar extends Component{
       }
     }
     render(){
-
-      console.log(this.context.authToken);
-      
         return(
             <nav className="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
             <Link className="navbar-brand" to="/" >{appname}</Link>
