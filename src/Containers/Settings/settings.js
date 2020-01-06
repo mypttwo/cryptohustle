@@ -6,6 +6,8 @@ import AuthContext from '../../authContext';
 import {withAppContext} from '../../HOC/withAppContext';
 import {getAuthConfig} from '../../Utils/getAuthConfig';
 
+import SettingsExchangeSetup from '../SettingsExchangeSetup/settingsExchangeSetup';
+
 
 class Settings extends Component{
 
@@ -14,29 +16,31 @@ class Settings extends Component{
     state = {
         exchanges : []
     }
+
     componentDidMount(){
         let config = getAuthConfig(this.context); 
         axios.get(`${server}/user/trackedexchanges`, config).then((res) => {
-            console.log(res.data);
             if(res.data){
                 let updatedExchanges =  this.props.exchanges.map((exchange) => {
-                    exchange.isSelected = false;
-                    let filteredExchanges = res.data.filter((trackedExchange) => trackedExchange.exchangeKey === exchange.key);
-                    exchange.isSelected = filteredExchanges.length?  true : false;
-                    return exchange;
+                    let updatedExchange = {key : exchange.key, name : exchange.name, url : exchange.url};
+                    updatedExchange.isSelected = false;
+                    let filteredExchanges = res.data.filter((trackedExchange) => trackedExchange.exchangeKey === updatedExchange.key);
+                    updatedExchange.isSelected = filteredExchanges.length?  true : false;
+                    updatedExchange.currencyMarketPairs = [];
+                    if(updatedExchange.isSelected){
+                        Object.assign(updatedExchange.currencyMarketPairs, filteredExchanges[0].currencyMarketPairs);
+                    }
+                    return updatedExchange;
                 });
+                console.log(updatedExchanges);
                 
                 this.setState({
                     exchanges : updatedExchanges
                 })
             }
-
-
         }).catch((err) => {
             console.error(err);
-            
-        })
-        console.log(this.props.exchanges);        
+        })        
     }
 
     handleCheckboxChange = (exchangeKey) => {
@@ -52,29 +56,63 @@ class Settings extends Component{
         })
     }
 
+    addCurrencyMarketPair = (exchange, currency, market) => {
+        let exchanges = [...this.state.exchanges];
+        let exchangesUpdated = exchanges.map((ex) => {
+            if(ex.key == exchange.key){
+                ex.currencyMarketPairs.push({
+                    currency : currency.symbol, 
+                    market : market.symbol
+                })
+            }
+            return ex;
+        })
+        this.setState({
+            exchanges : [...exchangesUpdated]
+        })
+    }
+
+    deleteCurrencyMarketPair = (exchange, index) => {
+        let exchanges = [...this.state.exchanges];
+        let exchangesUpdated = exchanges.map((ex) => {
+            if(ex.key == exchange.key){
+                ex.currencyMarketPairs.splice(index,1);
+            }
+            return ex;
+        })
+        this.setState({
+            exchanges : [...exchangesUpdated]
+        })
+    }
+
+    
+
     getExchangeJSX = () => {
-        return this.state.exchanges.map((exchange) => {
+        return this.state.exchanges.map((exchange) => {   
             return (
-                <div key={exchange.key} className="form-check form-check-inline">
-                <input checked={exchange.isSelected} onChange={() => this.handleCheckboxChange(exchange.key)} className="form-check-input" type="checkbox" id={"Checkbox" + exchange.name} value={exchange.name}/>
-                <label className="form-check-label" htmlFor={"Checkbox" + exchange.name}>{exchange.name}</label>
-                </div>            
+                <SettingsExchangeSetup exchange={exchange} key={exchange.key}
+                deleteCurrencyMarketPair={this.deleteCurrencyMarketPair}
+                addCurrencyMarketPair={this.addCurrencyMarketPair}
+                handleCheckboxChange={this.handleCheckboxChange}
+                />           
             )
         });        
     }
 
     handleSave = () => {
-      
         let config = getAuthConfig(this.context); 
-
-        let selectedExchangesKeys = this.state.exchanges.filter(exchange => exchange.isSelected).map(exchange => exchange.key);
+        let selectedExchangesKeys = this.state.exchanges.filter(exchange => exchange.isSelected)
+        .map(exchange => {
+                return {
+                    exchangeKey : exchange.key, 
+                    currencyMarketPairs : exchange.currencyMarketPairs
+                }
+            });
 
         axios.post(`${server}/user/trackedexchanges`,selectedExchangesKeys, config).then((res) => {
             console.log(res);
-            
         }).catch((err) => {
             console.log(err);
-            
         })
     }
 
@@ -83,12 +121,11 @@ class Settings extends Component{
             <div className="container pt-5">
                 <h2>Settings</h2>
                 <hr/>
-                <h4>Dashboard Settings</h4>
-                <p>Select the Exchanges you wish to track.</p>
-                <div className="form">
+                <h4>Select the Exchanges you wish to track.</h4>
+                <div className="htmlForm">
                     {this.getExchangeJSX()}
                 </div>
-                <div className="pt-3"><button onClick={this.handleSave} type="button" className="btn btn-primary">Save</button></div>
+                <div className="pt-5 pb-5"><button onClick={this.handleSave} type="button" className="btn btn-primary">Save</button></div>
             </div> 
         )
     }
