@@ -1,4 +1,4 @@
-const currencies = {
+const currencyMarketPairLookup = {
     BTC_ARDR:177,
     BTC_ATOM:253,
     BTC_BAT:210,
@@ -110,19 +110,77 @@ const currencies = {
     USDT_ZRX:220
 }
 
+const getCurrencyMarketPairValues = (currencyMarketPairs) => {
+    return currencyMarketPairs.map((cmp) => {
+        let currencyMarketPairString = `${cmp.market.toUpperCase()}_${cmp.currency.toUpperCase()}`;
+        let currencyMarketPairValue = currencyMarketPairLookup[currencyMarketPairString];
+        if(currencyMarketPairValue){
+            let cmpv = Object.assign({}, cmp);
+            cmpv.value = currencyMarketPairValue;
+            return cmpv;
+        } 
+        console.log(`No Value for ${currencyMarketPairString}`);
+    })
+}
 
-const create = (openHandler, messageHandler) => {
+const exchange = 'poloniex';
 
-    let socket = new WebSocket('wss://api2.poloniex.com');
-    socket.addEventListener('open', event => {
-        socket.send(JSON.stringify({ "command": "subscribe", "channel": 1002 }));
-        openHandler(event);
-    });
+const create = (openHandler, messageHandler, currencyMarketPairs) => {
+    try {
+        let socket = new WebSocket('wss://api2.poloniex.com');
+        socket.addEventListener('open', event => {
+            socket.send(JSON.stringify({ "command": "subscribe", "channel": 1002 }));
+            openHandler(event);
+        });
 
-    socket.addEventListener('message', event =>  {
+        let cmpVals = getCurrencyMarketPairValues(currencyMarketPairs);
 
-        messageHandler(event.data, null);
-    });
+        socket.addEventListener('message', event =>  {
+            //[1002,null,[149,"142.00237449","142.01940599","141.88455199","0.04548655","10745362.25554395","77637.06335022",0,"143.32221188","134.20000006"]]
+            let data = JSON.parse(event.data);
+            
+            if(data[0] == 1002 && data[2]){
+                cmpVals.forEach(cmpVal => {
+                    if(cmpVal){
+                        if(data[2][0] == cmpVal.value){
+                            //[ <id>, null, [ <currency pair id>, "<last trade price>", "<lowest ask>", "<highest bid>", "<percent change in last 24 hours>", "<base currency volume in last 24 hours>", "<quote currency volume in last 24 hours>", <is frozen>, "<highest trade price in last 24 hours>", "<lowest trade price in last 24 hours>" ], ... ]
+                            
+                            let response = {
+                                exchange : exchange,
+                                currency : cmpVal.currency,
+                                market : cmpVal.market,
+                                key : `${exchange}_${cmpVal.currency}_${cmpVal.market}`,
+                                lastPrice : data[2][1],
+                                buy : data[2][2],
+                                sell : data[2][1],
+                                timeStamp : '' + new Date()
+                            }
+
+                            messageHandler(response, null);
+                            
+                        }
+                    }
+                });
+            }
+        });
+
+        return {
+            destroy : () => {
+                try{
+                    socket.send(JSON.stringify({ "command": "unsubscribe", "channel": 1002 }));
+                    socket.send(JSON.stringify({ "command": "unsubscribe", "channel": 1010}));
+                } catch (err){
+                    console.error(err);
+                    
+                }
+
+                socket.close();
+            }
+        }
+    } catch (error) {
+        messageHandler(null, error);
+    }
+    
 }
 
 export {create};

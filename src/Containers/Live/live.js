@@ -11,13 +11,14 @@ import socket from '../../ExchangeSockets/socket';
 class Live extends Component{
     static contextType = AuthContext;
     state = {
-        exchanges : []
+        exchanges : [],
+        exchangeCurrencyMarketData : new Map()
     }
 
     sockets = [];
     setupSockets = () => {
         this.sockets = this.state.exchanges.map((exchange) => {
-            return socket[exchange.exchangeKey].create(this.socketOpenHandler, this.socketMessageHandler);
+            return socket[exchange.exchangeKey].create(this.socketOpenHandler, this.socketMessageHandler, exchange.currencyMarketPairs);
         })
     }
     socketOpenHandler = (event) => {
@@ -28,7 +29,11 @@ class Live extends Component{
             console.error(err);
             return;
         }
-        console.log(message);
+        let ecmData = new Map(this.state.exchangeCurrencyMarketData);
+        ecmData.set(message.key, message);
+        this.setState((state) => { return { exchangeCurrencyMarketData : ecmData}});
+        console.log(this.state.exchangeCurrencyMarketData);
+        
     }
     
     componentDidMount(){
@@ -44,10 +49,47 @@ class Live extends Component{
             console.error(err);
         })
     }
+
+    disconnectSockets = () => {
+        this.sockets.forEach((socket) => socket.destroy());
+    }
+    componentWillUnmount(){
+        this.disconnectSockets();
+    }
+
+    getECMCards = () => {
+        let ecmArray = Array.from(this.state.exchangeCurrencyMarketData.values());
+        return ecmArray.map((ecm) => {
+            return (
+                <React.Fragment key={ecm.key}>
+                    <div className="col-sm-3 mt-5">
+                        <div className="card">
+                            <div className="card-header">
+                                {ecm.exchange}/{ecm.currency}/{ecm.market}
+                            </div>
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item">Last Price : {ecm.lastPrice}</li>
+                                <li className="list-group-item">Buy : {ecm.buy}</li>
+                                <li className="list-group-item">Sell : {ecm.sell}</li>
+                            </ul>
+                            <div className="card-footer text-muted">
+                                {ecm.timeStamp}
+                            </div>                    
+                        </div>
+                    </div>
+                </React.Fragment>
+            )
+        }
+        )
+    }
+
     render(){
-        return <div>
-            Live
-        </div>
+        return (
+            <div className="container-fluid">
+                <div className="row">
+                    {this.getECMCards()}
+                </div>
+            </div>)
     }
 }
 
