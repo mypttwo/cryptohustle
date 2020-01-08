@@ -77,12 +77,20 @@ class Dashboard extends Component{
 
     getExchangeCardsJSX = () => {
         return this.state.exchangeData.map(exchange => {
+            if(exchange.data){
             return <ExchangeCard 
             key={exchange.exchangeKey} 
             exchangeKey={exchange.exchangeKey} 
             currency={this.state.currency}
             market={this.state.market}
             exchangeData={exchange}/>
+            } else {
+                return (
+                    <div className="col-sm-3 mb-2">
+                        <div>Login once again....</div>
+                    </div>
+                    )
+            }
         })
     }
 

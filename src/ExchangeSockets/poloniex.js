@@ -125,6 +125,7 @@ const getCurrencyMarketPairValues = (currencyMarketPairs) => {
 
 const exchange = 'poloniex';
 
+//https://docs.poloniex.com/#24-hour-exchange-volume
 const create = (openHandler, messageHandler, currencyMarketPairs) => {
     try {
         let socket = new WebSocket('wss://api2.poloniex.com');
