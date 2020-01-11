@@ -21,7 +21,7 @@ class Settings extends Component{
         let config = getAuthConfig(this.context); 
         axios.get(`${server}/user/trackedexchanges`, config).then((res) => {
             if(res.data){
-                let updatedExchanges =  this.props.exchanges.map((exchange) => {
+                let updatedExchanges =  this.props.appContext.exchanges.map((exchange) => {
                     let updatedExchange = {key : exchange.key, name : exchange.name, url : exchange.url};
                     updatedExchange.isSelected = false;
                     let filteredExchanges = res.data.filter((trackedExchange) => trackedExchange.exchangeKey === updatedExchange.key);

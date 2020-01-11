@@ -25,11 +25,27 @@ class AppContextProvider extends Component{
         })
     }
 
+    getExchangeByKey = (key) => {
+        let exchangeArr = this.state.exchanges.filter((exchange) => {
+            return exchange.key == key
+        })   
+        if(exchangeArr.length > 1){
+            const reducer = (accumulator, exchange) => accumulator + exchange.key + ' ';
+            exchangeArr.reduce(reducer, `Exchange Key :  ${key} Exchanges : `);
+            console.error(exchangeArr.reduce(reducer, `Exchange Key :  ${key} Exchanges : `));
+        }     
+        if(exchangeArr.length){
+            return exchangeArr[0];
+        }
+    }
+
     render(){
         return (
             <AppContext.Provider
             value={{
-                ...this.state
+                appContext : {
+                    getExchangeByKey : this.getExchangeByKey,
+                    ...this.state}
             }}>
                 {this.props.children}
             </AppContext.Provider>

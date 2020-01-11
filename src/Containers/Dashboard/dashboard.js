@@ -21,13 +21,8 @@ class Dashboard extends Component{
     }
 
     getExchangeNameFromKey = (key) => {
-        let exchangeArr = this.props.exchanges.filter((exchange) => {
-            return exchange.key == key
-        })        
-        if(exchangeArr.length){
-            return exchangeArr[0].name;
-        }
-        return '';  
+        let exchange = this.props.appContext.getExchangeByKey(key);
+        return exchange? exchange.key : '';
     }
 
     getExchangeData =  (exchanges, currency, market) => {
