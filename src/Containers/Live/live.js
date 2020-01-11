@@ -65,12 +65,13 @@ class Live extends Component{
                     <div className="col-sm-3 mt-5">
                         <div className="card">
                             <div className="card-header">
-                                {ecm.exchange}/{ecm.currency}/{ecm.market}
+                            <div class="card-title h4">{ecm.exchange}</div>
+                            <h6 class="card-subtitle mb-2">{ecm.currency}/{ecm.market}</h6>
                             </div>
                             <ul className="list-group list-group-flush">
-                                <li className="list-group-item">Last Price : {ecm.lastPrice}</li>
-                                <li className="list-group-item">Buy : {ecm.buy}</li>
-                                <li className="list-group-item">Sell : {ecm.sell}</li>
+                                <li className="list-group-item ">Last Price : {ecm.lastPrice}</li>
+                                <li className="list-group-item ">Buy : {ecm.buy}</li>
+                                <li className="list-group-item ">Sell : {ecm.sell}</li>
                             </ul>
                             <div className="card-footer text-muted">
                                 {ecm.timeStamp}
