@@ -24,9 +24,13 @@ const getSymbolText = (currency, market) => {
 }
 
 const getData = (currency, market) => {
-    let symbol = getSymbolText(currency.symbol, market.symbol);
+    let currencySymbol = currency.symbol? currency.symbol : currency;
+    let marketSymbol = market.symbol ? market.symbol : market;
+    let symbol = getSymbolText(currencySymbol, marketSymbol);
     return axios.get(`${server}/proxydigifinex?symbol=${symbol}`);
 }
+
+const exchange = 'digifinex';
 
 const read = (currency, market) => {
 
@@ -38,7 +42,8 @@ const read = (currency, market) => {
             buy : currencyData ? readCurrencyData(currencyData, "buy") : null,
             sell : currencyData ? readCurrencyData(currencyData, "sell") : null,
             allData : currencyData,
-            cache : res.data
+            cache : res.data,
+            key : `${exchange}_${currency.symbol}_${market.symbol}`,
         }
         
     }).catch((err) => {
