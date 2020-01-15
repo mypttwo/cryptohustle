@@ -21,7 +21,7 @@ class Main extends Component{
         authToken : null,
         userDbId : null,
         logout :false,
-        stylePath : themes['cyborg'].url
+        stylePath : themes['darkly'].url
     }
 
 
