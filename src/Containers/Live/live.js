@@ -114,7 +114,7 @@ class Live extends Component{
             console.error(err);
         })
         this.getApiExchangeData();
-        this.apiDataReaderTimer = setInterval(() => this.getApiExchangeData(), 15 * 1000);
+        this.apiDataReaderTimer = setInterval(() => this.getApiExchangeData(), 5 * 1000);
     }
 
     disconnectSockets = () => {
@@ -154,7 +154,6 @@ class Live extends Component{
     getECMCardsAPI = () => {
         let ecmArray = Array.from(this.state.apiExchangeCurrencyMarketData.values());
         return ecmArray.map((ecm) => {
-            ecm.timeStamp = '' + new Date();
             return (
                 <React.Fragment key={ecm.key}>
                     <div className="col-sm-3 mt-5">

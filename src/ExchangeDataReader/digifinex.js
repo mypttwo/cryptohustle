@@ -44,6 +44,7 @@ const read = (currency, market) => {
             allData : currencyData,
             cache : res.data,
             key : `${exchange}_${currency.symbol}_${market.symbol}`,
+            timeStamp : '' + new Date()
         }
         
     }).catch((err) => {
