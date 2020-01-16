@@ -49,8 +49,12 @@ class Dashboard extends Component{
         let config = getAuthConfig(this.context); 
         axios.get(`${server}/user/trackedexchanges`, config).then((res) => {
             if(res.data){
+                let apiExchanges = res.data.filter(te => {
+                    let ex = this.props.appContext.getExchangeByKey(te.exchangeKey);
+                    return ex.apiEnabled;
+                })
                 this.setState({
-                    exchanges : res.data
+                    exchanges : apiExchanges
                 })
                 this.getExchangeData(res.data)
             }
