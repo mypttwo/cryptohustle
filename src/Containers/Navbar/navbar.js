@@ -78,13 +78,13 @@ class Navbar extends Component{
          </ul>      
           <ul className="nav navbar-nav ml-auto">
           <li className="nav-item">
-            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickDashboard} className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
+            <a onClick={this.onClickDashboard} className={this.getClassName(this.DASHBOARD)} >Dashboard</a>
           </li>
           <li className="nav-item">
-            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickLive} className={this.getClassName(this.LIVE)} >Live</a>
+            <a onClick={this.onClickLive} className={this.getClassName(this.LIVE)} >Live</a>
           </li>
           <li className="nav-item">
-            <a data-toggle="collapse" data-target="#navb" onClick={this.onClickSettings} className={this.getClassName(this.SETTINGS)} >Settings</a>
+            <a onClick={this.onClickSettings} className={this.getClassName(this.SETTINGS)} >Settings</a>
           </li>  
           <li className="nav-item">
                 <a className="nav-link"  onClick={this.props.onClickLogout}><span className="fas fa-user"></span> Logout</a>
@@ -115,6 +115,7 @@ class Navbar extends Component{
         )
       }
     }
+      
     render(){
         return(
             <nav className="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
